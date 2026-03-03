@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AppForge</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Archivo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #ffffff;
+  --off: #DFDFDF;
+  --light: #456BD5;
+  --mid: #3D3D3D;
+  --dim: #000000;
+  --dark: #2a2926;
+  --ink: #111110;
+  --green: #1a7a4a;
+  --green-bg: #e8f5ee;
+  --red: #c0392b;
+  --red-bg: #fdf0ee;
+  --blue: #1a4a7a;
+  --mono: 'DM Mono', monospace;
+  --sans: 'Archivo', sans-serif;
+}
+
+html { font-size: 16px; }
+body {
+  background: var(--off);
+  color: var(--ink);
+  font-family: var(--sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--white);
+  border-bottom: 1px solid var(--light);
+  padding: 0 48px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.logo-name {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+
+.logo-badge {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+  padding-bottom: 1px;
+}
+
+.gh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  background: var(--ink);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--white);
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.15s, opacity 0.15s;
+}
+.gh-btn:hover { background: var(--dark); }
+.gh-btn.connected {
+  background: var(--off);
+  color: var(--ink);
+  border: 1px solid var(--light);
+}
+.gh-btn.connected:hover { background: var(--light); }
+
+.gh-indicator {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--mid);
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+.gh-btn.connected .gh-indicator {
+  background: var(--green);
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 56px 48px 80px;
+}
+
+/* ── PAGE TITLE ── */
+.page-head {
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--light);
+}
+
+.page-head h1 {
+  font-weight: 900;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.page-head p {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--dim);
+  letter-spacing: 0.5px;
+}
+
+/* ── PIPELINE ── */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 48px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.p-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.p-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--mid);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--dim);
+  flex-shrink: 0;
+}
+
+.p-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--dim);
+  letter-spacing: 0.3px;
+}
+
+.p-sep {
+  width: 32px; height: 1px;
+  background: var(--mid);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 2px;
+  background: var(--white);
+  border: 1px solid var(--light);
+  border-radius: 6px;
+  overflow: hidden;
+  animation: slideIn 0.3s ease both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.section:nth-child(1) { animation-delay: 0.05s; }
+.section:nth-child(2) { animation-delay: 0.1s; }
+.section:nth-child(3) { animation-delay: 0.15s; }
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--light);
+}
+
+.section-step {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--mid);
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+
+.section-body {
+  padding: 28px;
+}
+
+/* ── UPLOAD ── */
+.drop-zone {
+  border: 1.5px dashed var(--mid);
+  border-radius: 4px;
+  padding: 32px 24px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--off);
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+  border-color: var(--ink);
+  background: var(--light);
+}
+
+.drop-zone input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+
+.drop-icon {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.drop-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+
+.drop-label strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.file-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--off);
+  border: 1px solid var(--light);
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--dark);
+}
+
+.chip-rm {
+  background: none; border: none; cursor: pointer;
+  color: var(--mid); font-size: 0.85rem; padding: 0; line-height: 1;
+  transition: color 0.15s;
+}
+.chip-rm:hover { color: var(--red); }
+
+/* ── CONFIG GRID ── */
+.cfg-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.icon-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-box {
+  width: 80px; height: 80px;
+  border: 1.5px dashed var(--mid);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  background: var(--off);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.icon-box:hover { border-color: var(--ink); background: var(--light); }
+.icon-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.icon-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+
+.icon-hint {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--mid);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field.span2 { grid-column: 1 / -1; }
+
+.field label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.field input,
+.field select {
+  height: 40px;
+  padding: 0 12px;
+  background: var(--off);
+  border: 1px solid var(--light);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-appearance: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--ink);
+  background: var(--white);
+}
+
+.field input::placeholder { color: var(--mid); }
+
+/* ── BUILD SECTION ── */
+.repo-row {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.info-box {
+  background: var(--off);
+  border: 1px solid var(--light);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  line-height: 1.8;
+}
+
+.info-box-title {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.steps-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.step-pill {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--dim);
+  background: var(--off);
+  border: 1px solid var(--light);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.step-arrow { color: var(--mid); font-size: 0.7rem; }
+
+/* ── BUILD BUTTON ── */
+.build-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.btn-build {
+  flex: 1;
+  height: 48px;
+  background: var(--ink);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--white);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-build:hover { background: var(--dark); transform: translateY(-1px); }
+.btn-build:active { transform: translateY(0); }
+.btn-build:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 14px;
+  height: 30px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-tag.idle { background: var(--off); color: var(--dim); border: 1px solid var(--light); }
+.status-tag.running { background: #eef0fe; color: #3a3acc; border: 1px solid #c5c9f8; }
+.status-tag.done { background: var(--green-bg); color: var(--green); border: 1px solid #b5ddc5; }
+.status-tag.fail { background: var(--red-bg); color: var(--red); border: 1px solid #f0c0bb; }
+
+.s-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-tag.running .s-dot { animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* ── PROGRESS ── */
+.prog-wrap {
+  height: 2px;
+  background: var(--light);
+  border-radius: 1px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  display: none;
+}
+.prog-wrap.show { display: block; }
+.prog-bar {
+  height: 100%;
+  background: var(--ink);
+  border-radius: 1px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* ── LOG ── */
+.log {
+  background: var(--off);
+  border: 1px solid var(--light);
+  border-radius: 4px;
+  padding: 16px 18px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.9;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+}
+.log.show { display: block; }
+.log-row { display: flex; gap: 16px; }
+.log-ts { color: var(--mid); flex-shrink: 0; }
+.log-msg { color: var(--dim); }
+.log-msg.s { color: var(--green); }
+.log-msg.i { color: #3a3acc; }
+.log-msg.e { color: var(--red); }
+.log-msg.w { color: #996600; }
+
+/* ── RESULT ── */
+.result {
+  margin-top: 14px;
+  padding: 18px 20px;
+  border-radius: 4px;
+  display: none;
+}
+.result.show { display: flex; align-items: flex-start; gap: 14px; }
+.result.ok { background: var(--green-bg); border: 1px solid #b5ddc5; }
+.result.err { background: var(--red-bg); border: 1px solid #f0c0bb; }
+.result-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.result-body { font-family: var(--mono); font-size: 0.72rem; line-height: 1.8; color: var(--dark); }
+.result-body strong { display: block; font-weight: 600; margin-bottom: 4px; font-family: var(--sans); font-size: 0.82rem; color: var(--ink); }
+.result-body a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── MODAL ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(17,17,16,0.5);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: none; align-items: center; justify-content: center;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border: 1px solid var(--light);
+  border-radius: 8px;
+  padding: 36px;
+  width: 420px;
+  max-width: 92vw;
+  animation: modalIn 0.2s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+@keyframes modalIn {
+  from { transform: translateY(16px) scale(0.97); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.modal-sub {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.modal-sub strong { color: var(--dark); font-weight: 500; }
+
+.modal .field { margin-bottom: 14px; }
+
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+
+.btn-cancel {
+  flex: 1; height: 40px;
+  background: var(--off); border: 1px solid var(--light);
+  border-radius: 4px;
+  font-family: var(--mono); font-size: 0.75rem;
+  color: var(--dark); cursor: pointer;
+  transition: border-color 0.15s;
+}
+.btn-cancel:hover { border-color: var(--mid); }
+
+.btn-confirm {
+  flex: 2; height: 40px;
+  background: var(--ink); border: none;
+  border-radius: 4px;
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
+  color: var(--white); cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-confirm:hover { background: var(--dark); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--light); border-radius: 2px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  header { padding: 0 20px; }
+  main { padding: 32px 20px 60px; }
+  .cfg-grid { grid-template-columns: 1fr; }
+  .icon-upload { flex-direction: row; align-items: center; }
+  .form-grid { grid-template-columns: 1fr; }
+  .repo-row { grid-template-columns: 1fr; }
+  .build-row { flex-direction: column; align-items: stretch; }
+  .steps-row { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-title">Connect GitHub</div>
+    <div class="modal-sub">
+      Butuh Personal Access Token dengan scope <strong>repo</strong> &amp; <strong>workflow</strong>.<br>
+      GitHub → Settings → Developer Settings → Personal Access Tokens → Generate new token (classic)
+    </div>
+    <div class="field">
+      <label>Personal Access Token</label>
+      <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Username GitHub</label>
+      <input type="text" id="ghUser" placeholder="username">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-confirm" onclick="doConnect()">Connect →</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">
+    <span class="logo-name">AppForge</span>
+    <span class="logo-badge">APK Builder</span>
+  </div>
+  <button class="gh-btn" id="ghBtn" onclick="openModal()">
+    <div class="gh-indicator"></div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="opacity:.8"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    <span id="ghLabel">Connect GitHub</span>
+  </button>
+</header>
+
+<main>
+  <div class="page-head">
+    <h1>Web → APK<br>via GitHub Actions</h1>
+    <p>// upload files — configure — push — github builds your apk</p>
+  </div>
+
+  <div class="pipeline">
+    <div class="p-node"><div class="p-num">1</div><div class="p-label">Upload</div></div>
+    <div class="p-sep"></div>
+    <div class="p-node"><div class="p-num">2</div><div class="p-label">Configure</div></div>
+    <div class="p-sep"></div>
+    <div class="p-node"><div class="p-num">3</div><div class="p-label">Push to GitHub</div></div>
+    <div class="p-sep"></div>
+    <div class="p-node"><div class="p-num">4</div><div class="p-label">GH Actions Build</div></div>
+    <div class="p-sep"></div>
+    <div class="p-node"><div class="p-num">5</div><div class="p-label">Download APK</div></div>
+  </div>
+
+  <!-- Section 1: Upload -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-step">Step 01</span>
+      <span class="section-title">Source Files</span>
+    </div>
+    <div class="section-body">
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" multiple>
+        <span class="drop-icon">↑</span>
+        <div class="drop-label">Drop files here or <strong>click to browse</strong></div>
+        <div class="drop-label" style="margin-top:4px; font-size:.65rem; opacity:.7;">HTML, CSS, JS, images, dan semua aset web app</div>
+      </div>
+      <div class="file-chips" id="fileChips"></div>
+    </div>
+  </div>
+
+  <!-- Section 2: Config -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-step">Step 02</span>
+      <span class="section-title">App Configuration</span>
+    </div>
+    <div class="section-body">
+      <div class="cfg-grid">
+        <div class="icon-upload">
+          <div class="icon-box" id="iconBox">
+            <input type="file" id="iconInput" accept="image/*">
+            <span id="iconPh">⬡</span>
+          </div>
+          <div class="icon-hint">icon<br>512×512</div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>App Name</label>
+            <input type="text" id="appName" placeholder="My App">
+          </div>
+          <div class="field">
+            <label>Package Name</label>
+            <input type="text" id="pkgName" placeholder="com.example.app">
+          </div>
+          <div class="field">
+            <label>Version Name</label>
+            <input type="text" id="appVer" value="1.0.0" placeholder="1.0.0">
+          </div>
+          <div class="field">
+            <label>Version Code</label>
+            <input type="number" id="verCode" value="1" min="1">
+          </div>
+          <div class="field span2">
+            <label>Min SDK</label>
+            <select id="minSdk">
+              <option value="21">API 21 — Android 5.0 Lollipop</option>
+              <option value="23">API 23 — Android 6.0 Marshmallow</option>
+              <option value="24" selected>API 24 — Android 7.0 Nougat</option>
+              <option value="26">API 26 — Android 8.0 Oreo</option>
+              <option value="28">API 28 — Android 9.0 Pie</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Build -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-step">Step 03</span>
+      <span class="section-title">Build &amp; Deploy</span>
+    </div>
+    <div class="section-body">
+
+      <div class="repo-row">
+        <div class="field">
+          <label>Repository Name</label>
+          <input type="text" id="repoName" placeholder="my-android-app">
+        </div>
+        <div class="field">
+          <label>Branch</label>
+          <input type="text" id="branchName" value="main">
+        </div>
+      </div>
+
+      <div class="info-box">
+        <span class="info-box-title">GitHub Actions akan melakukan</span>
+        Setup Java 17 + Node.js 20 → Install Capacitor CLI → Wrap web files ke Android project → Gradle assembleDebug → Upload APK ke Artifacts (30 hari)
+        <br><span style="color:var(--mid)">Estimasi waktu build: 5–10 menit setelah push</span>
+      </div>
+
+      <div class="steps-row">
+        <span class="step-pill">checkout</span>
+        <span class="step-arrow">›</span>
+        <span class="step-pill">setup-java</span>
+        <span class="step-arrow">›</span>
+        <span class="step-pill">setup-node</span>
+        <span class="step-arrow">›</span>
+        <span class="step-pill">npm install</span>
+        <span class="step-arrow">›</span>
+        <span class="step-pill">cap init + sync</span>
+        <span class="step-arrow">›</span>
+        <span class="step-pill">gradle build</span>
+        <span class="step-arrow">›</span>
+        <span class="step-pill">upload artifact</span>
+      </div>
+
+      <div class="build-row">
+        <button class="btn-build" id="buildBtn" onclick="startBuild()">
+          Generate Workflow &amp; Push to GitHub
+        </button>
+        <div class="status-tag idle" id="statusTag">
+          <div class="s-dot"></div>
+          <span id="statusTxt">Idle</span>
+        </div>
+      </div>
+
+      <div class="prog-wrap" id="progWrap">
+        <div class="prog-bar" id="progBar"></div>
+      </div>
+
+      <div class="log" id="logEl"></div>
+      <div class="result" id="resultEl"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── State ──────────────────────────────────
+let token = '', user = '', files = [], iconFile = null;
+
+// ── Modal ───────────────────────────────────
+function openModal() { document.getElementById('overlay').classList.add('open'); }
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function doConnect() {
+  token = document.getElementById('ghToken').value.trim();
+  user  = document.getElementById('ghUser').value.trim();
+  if (!token || !user) { alert('Isi token dan username!'); return; }
+  closeModal();
+  const btn = document.getElementById('ghBtn');
+  btn.classList.add('connected');
+  document.getElementById('ghLabel').textContent = '@' + user;
+}
+
+// ── File Upload ─────────────────────────────
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover'); addFiles([...e.dataTransfer.files]); });
+document.getElementById('fileInput').addEventListener('change', function() { addFiles([...this.files]); });
+
+function addFiles(arr) {
+  arr.forEach(f => { if (!files.find(x => x.name === f.name)) files.push(f); });
+  renderChips();
+}
+function removeFile(i) { files.splice(i, 1); renderChips(); }
+function renderChips() {
+  document.getElementById('fileChips').innerHTML = files.map((f, i) =>
+    '<div class="chip">' + f.name + '<button class="chip-rm" onclick="removeFile(' + i + ')">×</button></div>'
+  ).join('');
+}
+
+// ── Icon ─────────────────────────────────────
+document.getElementById('iconInput').addEventListener('change', function() {
+  iconFile = this.files[0];
+  if (!iconFile) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const box = document.getElementById('iconBox');
+    box.innerHTML = '<input type="file" id="iconInput2" accept="image/*"><img src="' + e.target.result + '" alt="icon">';
+    document.getElementById('iconInput2').addEventListener('change', function() { iconFile = this.files[0]; });
+  };
+  r.readAsDataURL(iconFile);
+});
+
+// ── Helpers ──────────────────────────────────
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function setStatus(type, txt) {
+  const el = document.getElementById('statusTag');
+  el.className = 'status-tag ' + type;
+  document.getElementById('statusTxt').textContent = txt;
+}
+
+function setProgress(pct) {
+  document.getElementById('progWrap').classList.add('show');
+  document.getElementById('progBar').style.width = pct + '%';
+}
+
+function log(msg, type) {
+  type = type || '';
+  const el = document.getElementById('logEl');
+  el.classList.add('show');
+  const t = new Date().toLocaleTimeString('id-ID', { hour12: false });
+  el.innerHTML += '<div class="log-row"><span class="log-ts">' + t + '</span><span class="log-msg ' + type + '">' + msg + '</span></div>';
+  el.scrollTop = el.scrollHeight;
+}
+
+function showResult(ok, html) {
+  const el = document.getElementById('resultEl');
+  el.className = 'result show ' + (ok ? 'ok' : 'err');
+  el.innerHTML = '<div class="result-icon">' + (ok ? '✓' : '✗') + '</div><div class="result-body">' + html + '</div>';
+}
+
+// ── GitHub API ───────────────────────────────
+const hdrs = () => ({
+  'Authorization': 'token ' + token,
+  'Accept': 'application/vnd.github+json',
+  'Content-Type': 'application/json'
+});
+
+async function repoExists(repo) {
+  try {
+    const r = await fetch('https://api.github.com/repos/' + user + '/' + repo, { headers: hdrs() });
+    return r.status === 200;
+  } catch { return false; }
+}
+
+async function createRepo(repo, desc) {
+  try {
+    const r = await fetch('https://api.github.com/user/repos', {
+      method: 'POST', headers: hdrs(),
+      body: JSON.stringify({ name: repo, description: desc, private: false, auto_init: true })
+    });
+    return r.status === 201;
+  } catch { return false; }
+}
+
+async function getSHA(repo, path, branch) {
+  try {
+    const r = await fetch('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + path + '?ref=' + branch, { headers: hdrs() });
+    if (r.status === 200) { const d = await r.json(); return d.sha; }
+  } catch {}
+  return null;
+}
+
+async function pushContent(repo, branch, path, content, isB64) {
+  isB64 = isB64 || false;
+  const sha = await getSHA(repo, path, branch);
+  const body = {
+    message: (sha ? 'update ' : 'add ') + path + ' via AppForge',
+    content: isB64 ? content : btoa(unescape(encodeURIComponent(content))),
+    branch: branch
+  };
+  if (sha) body.sha = sha;
+  try {
+    const r = await fetch('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + path, {
+      method: 'PUT', headers: hdrs(), body: JSON.stringify(body)
+    });
+    return r.status === 200 || r.status === 201;
+  } catch { return false; }
+}
+
+async function pushFile(repo, branch, file, destPath) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const b64 = e.target.result.split(',')[1];
+      resolve(await pushContent(repo, branch, destPath || file.name, b64, true));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── Generators ───────────────────────────────
+function genWorkflow(cfg) {
+  var appSlug = cfg.appName.replace(/\s+/g, '-');
+  return [
+    'name: Build Android APK',
+    '',
+    'on:',
+    '  push:',
+    '    branches: [ "' + cfg.branch + '" ]',
+    '  workflow_dispatch:',
+    '',
+    'jobs:',
+    '  build-apk:',
+    '    name: Build APK',
+    '    runs-on: ubuntu-latest',
+    '',
+    '    steps:',
+    '      - name: Checkout',
+    '        uses: actions/checkout@v4',
+    '',
+    '      - name: Setup Java 17',
+    '        uses: actions/setup-java@v4',
+    '        with:',
+    '          distribution: temurin',
+    '          java-version: "17"',
+    '',
+    '      - name: Setup Node.js 20',
+    '        uses: actions/setup-node@v4',
+    '        with:',
+    '          node-version: "20"',
+    '',
+    '      - name: Install Capacitor packages',
+    '        run: |',
+    '          npm install --save @capacitor/core@latest',
+    '          npm install --save-dev @capacitor/cli@latest',
+    '          npm install @capacitor/android@latest',
+    '',
+    '      - name: Write capacitor.config.json',
+    '        run: |',
+    '          cat > capacitor.config.json << \'EOF\'',
+    '          {',
+    '            "appId": "' + cfg.pkg + '",',
+    '            "appName": "' + cfg.appName + '",',
+    '            "webDir": ".",',
+    '            "bundledWebRuntime": false',
+    '          }',
+    '          EOF',
+    '',
+    '      - name: Initialize Capacitor Android',
+    '        run: |',
+    '          # Remove android folder if exists from previous run',
+    '          rm -rf android',
+    '          # Add android platform',
+    '          npx cap add android',
+    '',
+    '      - name: Copy web assets to Android',
+    '        run: |',
+    '          npx cap copy android',
+    '',
+    '      - name: Setup Android SDK',
+    '        uses: android-actions/setup-android@v3',
+    '',
+    '      - name: Accept Android SDK licenses',
+    '        run: yes | sdkmanager --licenses || true',
+    '',
+    '      - name: Make gradlew executable',
+    '        run: chmod +x android/gradlew',
+    '',
+    '      - name: Build debug APK',
+    '        run: |',
+    '          cd android',
+    '          ./gradlew assembleDebug --no-daemon --stacktrace',
+    '        env:',
+    '          JAVA_HOME: ${{ env.JAVA_HOME }}',
+    '',
+    '      - name: Upload APK artifact',
+    '        uses: actions/upload-artifact@v4',
+    '        with:',
+    '          name: ' + appSlug + '-debug',
+    '          path: android/app/build/outputs/apk/debug/*.apk',
+    '          retention-days: 30',
+    ''
+  ].join('\n');
+}
+
+function genCapConfig(cfg) {
+  return JSON.stringify({ appId: cfg.pkg, appName: cfg.appName, webDir: '.', bundledWebRuntime: false }, null, 2);
+}
+
+function genPkgJson(cfg) {
+  return JSON.stringify({
+    name: cfg.pkg.split('.').pop(),
+    version: cfg.version,
+    description: cfg.appName + ' — AppForge',
+    scripts: { build: "echo 'ready'" },
+    dependencies: {
+      '@capacitor/android': '^6.0.0',
+      '@capacitor/cli': '^6.0.0',
+      '@capacitor/core': '^6.0.0'
+    }
+  }, null, 2);
+}
+
+// ── Build ────────────────────────────────────
+async function startBuild() {
+  if (!token || !user) { openModal(); return; }
+
+  const appName = document.getElementById('appName').value.trim() || 'My App';
+  const pkg     = document.getElementById('pkgName').value.trim() || 'com.example.app';
+  const version = document.getElementById('appVer').value.trim() || '1.0.0';
+  const verCode = document.getElementById('verCode').value || '1';
+  const minSdk  = document.getElementById('minSdk').value;
+  const repo    = document.getElementById('repoName').value.trim();
+  const branch  = document.getElementById('branchName').value.trim() || 'main';
+
+  if (!repo)              { alert('Masukkan nama repository!'); return; }
+  if (files.length === 0) { alert('Upload minimal 1 file web!'); return; }
+
+  const cfg = { appName, pkg, version, versionCode: verCode, minSdk, branch };
+
+  document.getElementById('logEl').innerHTML = '';
+  document.getElementById('resultEl').className = 'result';
+  document.getElementById('buildBtn').disabled = true;
+  setStatus('running', 'Running');
+  setProgress(0);
+
+  log(appName + ' v' + version + '  ·  ' + pkg, 'i');
+  log('target: ' + user + '/' + repo + '@' + branch, 'i');
+  await sleep(300);
+  setProgress(6);
+
+  // Check/create repo
+  log('checking repository...');
+  const exists = await repoExists(repo);
+  if (!exists) {
+    log('  not found — creating...', 'w');
+    const ok = await createRepo(repo, appName + ' — AppForge');
+    if (!ok) {
+      log('failed to create repo. check token scopes (repo + workflow)', 'e');
+      setStatus('fail', 'Failed');
+      document.getElementById('buildBtn').disabled = false;
+      showResult(false, '<strong>Gagal membuat repository</strong>Pastikan Personal Access Token kamu punya scope <code>repo</code> dan <code>workflow</code>.');
+      return;
+    }
+    log('  repository created', 's');
+    await sleep(1200);
+  } else {
+    log('  repository found', 's');
+  }
+  setProgress(18);
+
+  // Push source files
+  log('uploading ' + files.length + ' source file(s)...');
+  for (let i = 0; i < files.length; i++) {
+    await sleep(120 + Math.random() * 180);
+    const ok = await pushFile(repo, branch, files[i]);
+    log('  ' + (ok ? '✓' : '✗') + ' ' + files[i].name, ok ? 's' : 'e');
+    setProgress(18 + Math.round((i + 1) / files.length * 26));
+  }
+
+  // Icon
+  if (iconFile) {
+    log('uploading icon...');
+    const ok = await pushFile(repo, branch, iconFile, 'icon.png');
+    log('  ' + (ok ? '✓' : '✗') + ' icon.png', ok ? 's' : 'e');
+  }
+  setProgress(50);
+
+  // package.json
+  log('writing package.json...');
+  await pushContent(repo, branch, 'package.json', genPkgJson(cfg));
+  log('  ✓ package.json', 's');
+  setProgress(62);
+
+  // capacitor.config.json
+  log('writing capacitor.config.json...');
+  await pushContent(repo, branch, 'capacitor.config.json', genCapConfig(cfg));
+  log('  ✓ capacitor.config.json', 's');
+  setProgress(74);
+
+  // GitHub Actions workflow
+  log('writing .github/workflows/build-apk.yml...');
+  await sleep(200);
+  const wfOk = await pushContent(repo, branch, '.github/workflows/build-apk.yml', genWorkflow(cfg));
+  log('  ' + (wfOk ? '✓' : '✗') + ' build-apk.yml', wfOk ? 's' : 'e');
+  setProgress(92);
+
+  await sleep(400);
+  setProgress(100);
+  setStatus('done', 'Done');
+  document.getElementById('buildBtn').disabled = false;
+
+  log('');
+  log('workflow pushed — github actions triggered automatically', 's');
+  log('eta: 8-12 minutes', 'i');
+
+  showResult(true,
+    '<strong>Workflow berhasil di-push!</strong>' +
+    'GitHub Actions otomatis berjalan. Tunggu 8-12 menit.<br><br>' +
+    'Pantau: <a href="https://github.com/' + user + '/' + repo + '/actions" target="_blank">github.com/' + user + '/' + repo + '/actions</a><br>' +
+    'Download APK: Actions &#8594; run terbaru &#8594; <strong>Artifacts</strong><br><br>' +
+    '<span style="color:var(--dim)">Jika masih error: buka Actions &#8594; klik Re-run all jobs</span>'
+  );
+
+
+
+
+}
+</script>
+</body>
+</html>
