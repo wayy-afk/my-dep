@@ -1,0 +1,6 @@
+{
+  "appId": "com.deptover.app",
+  "appName": "Deploy To Vercel",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
